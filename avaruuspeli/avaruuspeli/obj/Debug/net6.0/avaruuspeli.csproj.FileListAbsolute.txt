@@ -53,3 +53,5 @@ C:\MyTemp\Pelitiedosto\avaruuspeli\avaruuspeli\avaruuspeli\obj\Debug\net6.0\avar
 C:\MyTemp\Pelitiedosto\avaruuspeli\avaruuspeli\avaruuspeli\obj\Debug\net6.0\ref\avaruuspeli.dll
 C:\MyTemp\Pelitiedosto\avaruuspeli\avaruuspeli\avaruuspeli\obj\Debug\net6.0\avaruuspeli.pdb
 C:\MyTemp\Pelitiedosto\avaruuspeli\avaruuspeli\avaruuspeli\obj\Debug\net6.0\avaruuspeli.genruntimeconfig.cache
+C:\MyTemp\Pelitiedosto\avaruuspeli\avaruuspeli\avaruuspeli\bin\Debug\net6.0\Content\Alus.png
+C:\MyTemp\Pelitiedosto\avaruuspeli\avaruuspeli\avaruuspeli\bin\Debug\net6.0\Content\AvaruusTausta.png
