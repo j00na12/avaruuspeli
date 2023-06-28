@@ -25,78 +25,15 @@ public class avaruuspeli : PhysicsGame
     
     public override void Begin()
     {
+        FixedTimeStep = true;
+        Kentta();
         Alus();
         VihollisAlukset();
         Asteroidit();
-        Ohjaukset();
-        Kentta();
         //AloitusNayttö();
         LuoAikalaskuri();
+        Ohjaukset();
     }
-
-    private void Alus()
-    {
-        _alus = new PhysicsObject(32, 32);
-
-        _aluksenKuva.Scaling = ImageScaling.Nearest;
-        _alus.Image = _aluksenKuva;
-        
-        Add(_alus);
-
-        Camera.ZoomFactor = 2;
-        Camera.Follow(_alus);
-
-        _ase = new AssaultRifle(30, 10);
-        _ase.FireRate = 7;
-        _ase.ProjectileCollision = AmmusOsui;
-        _alus.Add(_ase);
-        _alus.RelativePosition = new Vector(_alus.Width / 2, 0);
-    }
-
-    private void AmmusOsui(PhysicsObject ammus, PhysicsObject kohde)
-    {
-        ammus.Destroy();
-    }
-    void AmmuAseella(AssaultRifle ase)
-    {
-        PhysicsObject ammus = ase.Shoot();
-
-        if (ammus != null)
-        {
-            ammus.Size *= 2;
-            ammus.Image = _ammus;
-            ammus.MaximumLifetime = TimeSpan.FromSeconds(2.0);
-        }
-    }
-
-    private void VihollisAlukset()
-    {
-        PhysicsObject vihollisenAlus = new PhysicsObject(32, 32);
-
-        vihollisenAlus.Image = _vihollisaluksenKuva;
-        
-        vihollisenAlus.X = 100;
-        Add(vihollisenAlus);
-    }
-
-    private void Asteroidit()
-    {
-        PhysicsObject asteroidi = new PhysicsObject(200, 200);
-        asteroidi.Image = _asteroidi;
-        asteroidi.X = 200;
-        Add(asteroidi);
-    }
-
-    private void Ohjaukset()
-    {
-        Mouse.Listen(MouseButton.Right, ButtonState.Down, Ammu, "Ammu hiiren suuntaan.");
-        Mouse.ListenMovement(0.1, KuunteleLiiketta, null);
-        
-        Mouse.Listen(MouseButton.Left, ButtonState.Down, AmmuAseella, "Ammu", _ase);
-
-        Keyboard.Listen(Key.Escape, ButtonState.Pressed, Paussilla, "Paussittaa pelin");
-    }
-
     private void Kentta()
     {
         Level.Background.Color = Color.Black;
@@ -104,26 +41,67 @@ public class avaruuspeli : PhysicsGame
         Level.Background.TileToLevel();
     }
     
-    private void Paussilla()
+    private void Ohjaukset()
     {
-        Pause();
-        MultiSelectWindow paussiMenu = new MultiSelectWindow("Paussilla", "Jatka", "Lopeta");
-        paussiMenu.AddItemHandler(0, Jatka);
-        paussiMenu.AddItemHandler(1, Exit);
-        paussiMenu.DefaultCancel = 0;
-        Add(paussiMenu);
+        Mouse.ListenMovement(0.1, KuunteleLiiketta, null);
+        Mouse.Listen(MouseButton.Left, ButtonState.Down, AmmuAseella, "Ammu", _ase);
         
-        paussiMenu.Color = Color.DarkGray;
-        paussiMenu.SetButtonColor(Color.MidnightBlue);
+        Keyboard.Listen(Key.Escape, ButtonState.Pressed, Paussilla, "Paussittaa pelin");
+        Keyboard.Listen(Key.F1, ButtonState.Pressed,ShowControlHelp, "Näytä ohjeet");
     }
+    
+    private void Alus()
+    {
+        _alus = new PhysicsObject(32, 32);
+
+        _aluksenKuva.Scaling = ImageScaling.Nearest;
+        _alus.Image = _aluksenKuva;
+
+        Add(_alus);
+
+        Camera.ZoomFactor = 2;
+        Camera.Follow(_alus);
+
+        _ase = new AssaultRifle(0, 0);
+        _ase.FireRate = 7;
+        _ase.ProjectileCollision = AmmusOsui;
+        _alus.Add(_ase);
+        _alus.RelativePosition = new Vector(_alus.Width / 2, 0);
+        
+        
+        Mouse.ListenMovement(0.1, Tahtaa, "Tähtää aseella");
+    }
+    void Tahtaa()
+    {
+        Vector suunta = (Mouse.PositionOnWorld - _alus.AbsolutePosition).Normalize();
+        _ase.Angle = suunta.Angle;
+        _alus.Angle = suunta.Angle + Angle.FromDegrees(-135);
+    }
+
+    private void VihollisAlukset()
+    {
+        PhysicsObject vihollisenAlus = new PhysicsObject(32, 32);
+        _vihollisaluksenKuva.Scaling = ImageScaling.Nearest;
+        vihollisenAlus.Image = _vihollisaluksenKuva;
+        vihollisenAlus.X = 100;
+        Add(vihollisenAlus);
+    }
+
+    private void Asteroidit()
+    {
+        PhysicsObject asteroidi = new PhysicsObject(200, 200);
+        _asteroidi.Scaling = ImageScaling.Nearest;
+        asteroidi.Image = _asteroidi;
+        asteroidi.X = 200;
+        asteroidi.Mass = 300;
+        Add(asteroidi);
+    }
+
+    
 
     private void Jatka()
     {
         Pause();
-    }
-    private void Ammu()
-    {
-        
     }
     
     private void KuunteleLiiketta()
@@ -132,7 +110,7 @@ public class avaruuspeli : PhysicsGame
         //_alus.MoveTo(paikkaRuudulla, 500);
 
         Vector hiiri = Mouse.PositionOnWorld - _alus.Position;
-        _alus.MoveTo(hiiri * Int32.MaxValue, 200);
+        _alus.MoveTo(hiiri * Int32.MaxValue, 100);
 
     }
 
@@ -173,7 +151,39 @@ public class avaruuspeli : PhysicsGame
         aikanaytto.X = -400;
         aikanaytto.Y = 300;
     }
+    
+    private void Paussilla()
+    {
+        Pause();
+        MultiSelectWindow paussiMenu = new MultiSelectWindow("Paussilla", "Jatka", "Lopeta");
+        paussiMenu.AddItemHandler(0, Jatka);
+        paussiMenu.AddItemHandler(1, Exit);
+        paussiMenu.DefaultCancel = 0;
+        Add(paussiMenu);
+        
+        paussiMenu.Color = Color.DarkGray;
+        paussiMenu.SetButtonColor(Color.MidnightBlue);
+    }
+    
+    private void AmmusOsui(PhysicsObject ammus, PhysicsObject kohde)
+    {
+        ammus.Destroy();
+    }
+    
+    void AmmuAseella(AssaultRifle ase)
+    {
+        PhysicsObject ammus = ase.Shoot();
+
+        if (ammus != null)
+        {
+            ammus.Size *= 2;
+            ammus.Image = _ammus;
+            ammus.MaximumLifetime = TimeSpan.FromSeconds(2.0);
+        }
+    }
 }
+
+
 
 class Vihollinen : PhysicsObject
 {
