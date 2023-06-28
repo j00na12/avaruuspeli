@@ -102,7 +102,7 @@ public class avaruuspeli : PhysicsGame
         //_alus.MoveTo(paikkaRuudulla, 500);
 
         Vector hiiri = Mouse.PositionOnWorld - _alus.Position;
-        _alus.MoveTo(hiiri * Int32.MaxValue, 300);
+        _alus.MoveTo(hiiri * Int32.MaxValue, 200);
 
     }
 
