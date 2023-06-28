@@ -16,16 +16,18 @@ public class avaruuspeli : PhysicsGame
     private Image _vihollisaluksenKuva = LoadImage("VihollisAlus.png");
     private Image _ammus = LoadImage("Ammus.png");
     private Image _asteroidi = LoadImage("Asteroidi.png");
+    private Image _liekki = LoadImage("Liekki.png");
+    private Image _savu = LoadImage("Savu.png");
     
     AssaultRifle _ase;
     
     private PhysicsObject _alus;
-    //private ListenContext ohjaimet;
     
     public override void Begin()
     {
         Alus();
         VihollisAlukset();
+        Asteroidit();
         Ohjaukset();
         Kentta();
         //AloitusNayttö();
@@ -77,14 +79,18 @@ public class avaruuspeli : PhysicsGame
         Add(vihollisenAlus);
     }
 
+    private void Asteroidit()
+    {
+        PhysicsObject asteroidi = new PhysicsObject(200, 200);
+        asteroidi.Image = _asteroidi;
+        asteroidi.X = 200;
+        Add(asteroidi);
+    }
+
     private void Ohjaukset()
     {
-        //ohjaimet = ControlContext.CreateSubcontext();
-        
-        //Mouse.Listen(MouseButton.Left, ButtonState.Pressed, Eteenpain, "Liiku hiiren suuntaan.");
-        //Mouse.Listen(MouseButton.Left, ButtonState.Released, Pysaytys, null);
         Mouse.Listen(MouseButton.Right, ButtonState.Down, Ammu, "Ammu hiiren suuntaan.");
-        Mouse.ListenMovement(0.1, KuunteleLiiketta, null); //.InContext(ohjaimet);
+        Mouse.ListenMovement(0.1, KuunteleLiiketta, null);
         
         Mouse.Listen(MouseButton.Left, ButtonState.Down, AmmuAseella, "Ammu", _ase);
 
@@ -97,16 +103,7 @@ public class avaruuspeli : PhysicsGame
         Level.Background.Image = _avaruusTausta;
         Level.Background.TileToLevel();
     }
-
-    /* private void Eteenpain()
-    {
-        ohjaimet.Enable();
-    }
-
-    private void Pysaytys()
-    {
-        ohjaimet.Disable();
-    } */
+    
     private void Paussilla()
     {
         Pause();
