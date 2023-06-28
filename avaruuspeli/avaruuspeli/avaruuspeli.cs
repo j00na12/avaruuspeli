@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Net.Mime;
 using FarseerPhysics.Dynamics;
 using Jypeli;
 using Jypeli.Assets;
@@ -12,8 +13,9 @@ public class avaruuspeli : PhysicsGame
 {
     private Image _avaruusTausta = LoadImage("AvaruusTausta.png");
     private Image _aluksenKuva = LoadImage("Alus.png");
-    //private Image _vihollisaluksenKuva = LoadImage("VihollisAlus.png");
-    //private Image _ammus = LoadImage("Ammus.png");
+    private Image _vihollisaluksenKuva = LoadImage("VihollisAlus.png");
+    private Image _ammus = LoadImage("Ammus.png");
+    private Image _asteroidi = LoadImage("Asteroidi.png");
     
     AssaultRifle _ase;
     
@@ -22,11 +24,11 @@ public class avaruuspeli : PhysicsGame
     
     public override void Begin()
     {
-        //AloitusNayttö();
         Alus();
         VihollisAlukset();
-        Kentta();
         Ohjaukset();
+        Kentta();
+        //AloitusNayttö();
         LuoAikalaskuri();
     }
 
@@ -43,7 +45,7 @@ public class avaruuspeli : PhysicsGame
         Camera.Follow(_alus);
 
         _ase = new AssaultRifle(30, 10);
-        _ase.FireRate = 5;
+        _ase.FireRate = 7;
         _ase.ProjectileCollision = AmmusOsui;
         _alus.Add(_ase);
         _alus.RelativePosition = new Vector(_alus.Width / 2, 0);
@@ -59,8 +61,8 @@ public class avaruuspeli : PhysicsGame
 
         if (ammus != null)
         {
-            ammus.Size *= 3;
-            //ammus.Image = _ammus;
+            ammus.Size *= 2;
+            ammus.Image = _ammus;
             ammus.MaximumLifetime = TimeSpan.FromSeconds(2.0);
         }
     }
@@ -69,7 +71,7 @@ public class avaruuspeli : PhysicsGame
     {
         PhysicsObject vihollisenAlus = new PhysicsObject(32, 32);
 
-        vihollisenAlus.Image = _aluksenKuva;
+        vihollisenAlus.Image = _vihollisaluksenKuva;
         
         vihollisenAlus.X = 100;
         Add(vihollisenAlus);
@@ -84,7 +86,7 @@ public class avaruuspeli : PhysicsGame
         Mouse.Listen(MouseButton.Right, ButtonState.Down, Ammu, "Ammu hiiren suuntaan.");
         Mouse.ListenMovement(0.1, KuunteleLiiketta, null); //.InContext(ohjaimet);
         
-        Keyboard.Listen(Key.Space, ButtonState.Down, AmmuAseella, "Ammu", _ase);
+        Mouse.Listen(MouseButton.Left, ButtonState.Down, AmmuAseella, "Ammu", _ase);
 
         Keyboard.Listen(Key.Escape, ButtonState.Pressed, Paussilla, "Paussittaa pelin");
     }
