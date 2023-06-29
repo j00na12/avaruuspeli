@@ -19,7 +19,9 @@ public class avaruuspeli : PhysicsGame
     private Image _liekki = LoadImage("Liekki.png");
     private Image _savu = LoadImage("Savu.png");
     
-    AssaultRifle _ase;
+    private AssaultRifle _ase;
+
+    private IntMeter _pistelaskuri;
     
     private PhysicsObject _alus;
     
@@ -32,6 +34,7 @@ public class avaruuspeli : PhysicsGame
         Asteroidit();
         //AloitusNayttö();
         LuoAikalaskuri();
+        LuoPistelaskuri();
         Ohjaukset();
     }
     private void Kentta()
@@ -67,7 +70,8 @@ public class avaruuspeli : PhysicsGame
         _ase.ProjectileCollision = AmmusOsui;
         _alus.Add(_ase);
         _alus.RelativePosition = new Vector(_alus.Width / 2, 0);
-        
+
+        _alus.CanRotate = false;
         
         Mouse.ListenMovement(0.1, Tahtaa, "Tähtää aseella");
     }
@@ -80,21 +84,34 @@ public class avaruuspeli : PhysicsGame
 
     private void VihollisAlukset()
     {
-        PhysicsObject vihollisenAlus = new PhysicsObject(32, 32);
+        Vihollinen vihollisenAlus = new Vihollinen(32, 32);
         _vihollisaluksenKuva.Scaling = ImageScaling.Nearest;
         vihollisenAlus.Image = _vihollisaluksenKuva;
         vihollisenAlus.X = 100;
+        vihollisenAlus.Tag = "vihu";
         Add(vihollisenAlus);
+
+
+        FollowerBrain vihuAivot = new FollowerBrain(_alus);
+        vihollisenAlus.Brain = vihuAivot;
+        vihuAivot.TurnWhileMoving = true;
+        vihuAivot.Speed = 20;
     }
 
     private void Asteroidit()
     {
-        PhysicsObject asteroidi = new PhysicsObject(200, 200);
+        AsteroidiTuho asteroidi = new AsteroidiTuho(200, 200);
         _asteroidi.Scaling = ImageScaling.Nearest;
         asteroidi.Image = _asteroidi;
         asteroidi.X = 200;
         asteroidi.Mass = 300;
+        asteroidi.Tag = "asteroiditag";
         Add(asteroidi);
+
+        RandomMoverBrain asteroidiLiike = new RandomMoverBrain();
+        asteroidi.Brain = asteroidiLiike;
+        asteroidiLiike.Speed = 10;
+        asteroidiLiike.ChangeMovementSeconds = 5;
     }
 
     
@@ -147,9 +164,26 @@ public class avaruuspeli : PhysicsGame
         aikanaytto.DecimalPlaces = 0;
         aikanaytto.BindTo(aikalaskuri.SecondCounter);
         Add(aikanaytto);
+        
+        aikanaytto.X = Screen.Left + 120;
+        aikanaytto.Y = Screen.Top - 75;
 
-        aikanaytto.X = -400;
-        aikanaytto.Y = 300;
+        aikanaytto.Title = "Aika: ";
+    }
+    
+    void LuoPistelaskuri()
+    {
+        _pistelaskuri = new IntMeter(0);               
+      
+        Label pistenaytto = new Label(); 
+        pistenaytto.X = Screen.Right - 120;
+        pistenaytto.Y = Screen.Top - 75;
+        pistenaytto.TextColor = Color.White;
+
+        pistenaytto.BindTo(_pistelaskuri);
+        Add(pistenaytto);
+
+        pistenaytto.Title = "Pisteet: ";
     }
     
     private void Paussilla()
@@ -168,6 +202,16 @@ public class avaruuspeli : PhysicsGame
     private void AmmusOsui(PhysicsObject ammus, PhysicsObject kohde)
     {
         ammus.Destroy();
+        if (kohde.Tag.ToString() == "vihu")
+        {
+            (kohde as Vihollinen).Elamalaskuri.AddValue(-1);
+            _pistelaskuri.Value += 3;
+        }
+        else if (kohde.Tag.ToString() == "asteroiditag")
+        {
+            (kohde as AsteroidiTuho).Elamalaskuri.AddValue(-1);
+            _pistelaskuri.Value += 2;
+        }
     }
     
     void AmmuAseella(AssaultRifle ase)
@@ -191,6 +235,19 @@ class Vihollinen : PhysicsObject
     public  IntMeter Elamalaskuri { get { return _elamalaskuri; } }
 
     public Vihollinen(double leveys, double korkeus)
+        : base(leveys, korkeus)
+    {
+        _elamalaskuri.LowerLimit += delegate { this.Destroy(); };
+    }
+}
+
+
+class AsteroidiTuho : PhysicsObject
+{
+    private IntMeter _elamalaskuri = new IntMeter(15, 0, 15);
+    public  IntMeter Elamalaskuri { get { return _elamalaskuri; } }
+
+    public AsteroidiTuho(double leveys, double korkeus)
         : base(leveys, korkeus)
     {
         _elamalaskuri.LowerLimit += delegate { this.Destroy(); };
