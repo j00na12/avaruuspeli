@@ -5,6 +5,7 @@ using FarseerPhysics.Dynamics;
 using Jypeli;
 using Jypeli.Assets;
 using Jypeli.Controls;
+using Jypeli.Effects;
 using Jypeli.Widgets;
 
 namespace avaruuspeli;
@@ -25,10 +26,10 @@ public class avaruuspeli : PhysicsGame
     private IntMeter _pistelaskuri;
     
     private PhysicsObject _alus;
+    private PhysicsObject _vihollisenAlus;
     
     public override void Begin()
     {
-        IsFullScreen = true;
         FixedTimeStep = true;
         Kentta();
         Alus();
@@ -86,15 +87,15 @@ public class avaruuspeli : PhysicsGame
     
     private void VihollisAlukset()
     {
-        Vihollinen vihollisenAlus = new Vihollinen(32, 32);
+        Vihollinen _vihollisenAlus = new Vihollinen(32, 32);
         _vihollisaluksenKuva.Scaling = ImageScaling.Nearest;
-        vihollisenAlus.Image = _vihollisaluksenKuva;
-        vihollisenAlus.X = 100;
-        vihollisenAlus.Tag = "vihu";
-        Add(vihollisenAlus);
+        _vihollisenAlus.Image = _vihollisaluksenKuva;
+        _vihollisenAlus.X = 100;
+        _vihollisenAlus.Tag = "vihu";
+        Add(_vihollisenAlus);
         
         FollowerBrain vihuAivot = new FollowerBrain(_alus);
-        vihollisenAlus.Brain = vihuAivot;
+        _vihollisenAlus.Brain = vihuAivot;
         vihuAivot.TurnWhileMoving = true;
         vihuAivot.Speed = 30;
     }
@@ -126,7 +127,7 @@ public class avaruuspeli : PhysicsGame
         //_alus.MoveTo(paikkaRuudulla, 500);
 
         Vector hiiri = Mouse.PositionOnWorld - _alus.Position;
-        _alus.MoveTo(hiiri * Int32.MaxValue, 100);
+        _alus.MoveTo(hiiri * Int32.MaxValue, 200);
 
     }
     
@@ -202,10 +203,25 @@ public class avaruuspeli : PhysicsGame
     private void AmmusOsui(PhysicsObject ammus, PhysicsObject kohde)
     {
         ammus.Destroy();
+        
+        int pMaxMaara = 200;
+        ExplosionSystem rajahdys = new ExplosionSystem(_liekki, pMaxMaara);
+        
+        rajahdys.MinVelocity = 5; // Muodostuvien hiukkasten miniminopeus
+        rajahdys.MinLifetime = 0.2; // Muodostuvien hiukkasten minimielinaika
+        
+        rajahdys.MaxVelocity = 20; // Muodostuvien hiukkasten maksiminopeus
+        rajahdys.MaxLifetime = 1; // Muodostuvien hiukkasten maksimielinaika
+        Add(rajahdys);
+
+        int pMaara = 5;
+        
         if (kohde.Tag.ToString() == "vihu")
         {
+            rajahdys.AddEffect(_vihollisenAlus.X, _vihollisenAlus.Y, pMaara);
             (kohde as Vihollinen).Elamalaskuri.AddValue(-1);
             _pistelaskuri.Value += 2;
+            
         }
         else if (kohde.Tag.ToString() == "asteroiditag")
         {
