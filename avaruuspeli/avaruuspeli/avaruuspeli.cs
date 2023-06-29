@@ -12,6 +12,7 @@ namespace avaruuspeli;
 public class avaruuspeli : PhysicsGame
 {
     private Image _avaruusTausta = LoadImage("AvaruusTausta.png");
+    private Image _nebula = LoadImage("HienoNebula.png");
     private Image _aluksenKuva = LoadImage("Alus.png");
     private Image _vihollisaluksenKuva = LoadImage("VihollisAlus.png");
     private Image _ammus = LoadImage("Ammus.png");
@@ -27,6 +28,7 @@ public class avaruuspeli : PhysicsGame
     
     public override void Begin()
     {
+        IsFullScreen = true;
         FixedTimeStep = true;
         Kentta();
         Alus();
@@ -59,18 +61,18 @@ public class avaruuspeli : PhysicsGame
 
         _aluksenKuva.Scaling = ImageScaling.Nearest;
         _alus.Image = _aluksenKuva;
-
+        
         Add(_alus);
-
+        
         Camera.ZoomFactor = 2;
         Camera.Follow(_alus);
-
+        
         _ase = new AssaultRifle(0, 0);
         _ase.FireRate = 7;
         _ase.ProjectileCollision = AmmusOsui;
         _alus.Add(_ase);
         _alus.RelativePosition = new Vector(_alus.Width / 2, 0);
-
+        
         _alus.CanRotate = false;
         
         Mouse.ListenMovement(0.1, Tahtaa, "Tähtää aseella");
@@ -81,7 +83,7 @@ public class avaruuspeli : PhysicsGame
         _ase.Angle = suunta.Angle;
         _alus.Angle = suunta.Angle + Angle.FromDegrees(-135);
     }
-
+    
     private void VihollisAlukset()
     {
         Vihollinen vihollisenAlus = new Vihollinen(32, 32);
@@ -90,14 +92,13 @@ public class avaruuspeli : PhysicsGame
         vihollisenAlus.X = 100;
         vihollisenAlus.Tag = "vihu";
         Add(vihollisenAlus);
-
-
+        
         FollowerBrain vihuAivot = new FollowerBrain(_alus);
         vihollisenAlus.Brain = vihuAivot;
         vihuAivot.TurnWhileMoving = true;
-        vihuAivot.Speed = 20;
+        vihuAivot.Speed = 30;
     }
-
+    
     private void Asteroidit()
     {
         AsteroidiTuho asteroidi = new AsteroidiTuho(200, 200);
@@ -113,9 +114,7 @@ public class avaruuspeli : PhysicsGame
         asteroidiLiike.Speed = 10;
         asteroidiLiike.ChangeMovementSeconds = 5;
     }
-
     
-
     private void Jatka()
     {
         Pause();
@@ -130,7 +129,7 @@ public class avaruuspeli : PhysicsGame
         _alus.MoveTo(hiiri * Int32.MaxValue, 100);
 
     }
-
+    
     /*private void AloitusNayttö()
     {
         MultiSelectWindow alkuvalikko = new MultiSelectWindow("Avaruus Peli!", "Aloita peli", "Parhaat pisteet", "Lopeta");
@@ -144,7 +143,7 @@ public class avaruuspeli : PhysicsGame
         alkuvalikko.Color = Color.DarkGray;
         alkuvalikko.SetButtonColor(Color.MidnightBlue);
     }
-
+    
     private void AloitaPeli()
     {
         
@@ -154,11 +153,12 @@ public class avaruuspeli : PhysicsGame
     {
         
     }*/
+    
     void LuoAikalaskuri()
     {
         Timer aikalaskuri = new Timer();
         aikalaskuri.Start();
-
+        
         Label aikanaytto = new Label();
         aikanaytto.TextColor = Color.White;
         aikanaytto.DecimalPlaces = 0;
@@ -167,22 +167,22 @@ public class avaruuspeli : PhysicsGame
         
         aikanaytto.X = Screen.Left + 120;
         aikanaytto.Y = Screen.Top - 75;
-
+        
         aikanaytto.Title = "Aika: ";
     }
     
     void LuoPistelaskuri()
     {
         _pistelaskuri = new IntMeter(0);               
-      
+        
         Label pistenaytto = new Label(); 
         pistenaytto.X = Screen.Right - 120;
         pistenaytto.Y = Screen.Top - 75;
         pistenaytto.TextColor = Color.White;
-
+        
         pistenaytto.BindTo(_pistelaskuri);
         Add(pistenaytto);
-
+        
         pistenaytto.Title = "Pisteet: ";
     }
     
@@ -205,12 +205,12 @@ public class avaruuspeli : PhysicsGame
         if (kohde.Tag.ToString() == "vihu")
         {
             (kohde as Vihollinen).Elamalaskuri.AddValue(-1);
-            _pistelaskuri.Value += 3;
+            _pistelaskuri.Value += 2;
         }
         else if (kohde.Tag.ToString() == "asteroiditag")
         {
             (kohde as AsteroidiTuho).Elamalaskuri.AddValue(-1);
-            _pistelaskuri.Value += 2;
+            _pistelaskuri.Value += 1;
         }
     }
     

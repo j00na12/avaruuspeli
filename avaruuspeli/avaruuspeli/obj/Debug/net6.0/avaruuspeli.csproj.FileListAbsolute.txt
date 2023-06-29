@@ -60,3 +60,4 @@ C:\MyTemp\Pelitiedosto\avaruuspeli\avaruuspeli\avaruuspeli\bin\Debug\net6.0\Cont
 C:\MyTemp\Pelitiedosto\avaruuspeli\avaruuspeli\avaruuspeli\bin\Debug\net6.0\Content\Asteroidi.png
 C:\MyTemp\Pelitiedosto\avaruuspeli\avaruuspeli\avaruuspeli\bin\Debug\net6.0\Content\Liekki.png
 C:\MyTemp\Pelitiedosto\avaruuspeli\avaruuspeli\avaruuspeli\bin\Debug\net6.0\Content\Savu.png
+C:\MyTemp\Pelitiedosto\avaruuspeli\avaruuspeli\avaruuspeli\bin\Debug\net6.0\Content\HienoNebula.png
