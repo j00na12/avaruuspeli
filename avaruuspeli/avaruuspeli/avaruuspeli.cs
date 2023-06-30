@@ -10,6 +10,8 @@ using Jypeli.Widgets;
 
 namespace avaruuspeli;
 
+// Versio 1.0
+
 public class avaruuspeli : PhysicsGame
 {
     private Image _avaruusTausta = LoadImage("AvaruusTausta.png");

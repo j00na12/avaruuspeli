@@ -24,7 +24,7 @@
             <Value>joona</Value>
           </Field>
           <Field Name="Score" Type="System.Double, System.Private.CoreLib, Version=6.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e">
-            <Value>53</Value>
+            <Value>66</Value>
           </Field>
         </Item>
         <Item Index="3" Type="Jypeli.ScoreItem, Jypeli, Version=11.3.7.0, Culture=neutral, PublicKeyToken=null">
@@ -32,7 +32,7 @@
             <Value>joona</Value>
           </Field>
           <Field Name="Score" Type="System.Double, System.Private.CoreLib, Version=6.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e">
-            <Value>51</Value>
+            <Value>53</Value>
           </Field>
         </Item>
         <Item Index="4" Type="Jypeli.ScoreItem, Jypeli, Version=11.3.7.0, Culture=neutral, PublicKeyToken=null">
@@ -40,7 +40,7 @@
             <Value>joona</Value>
           </Field>
           <Field Name="Score" Type="System.Double, System.Private.CoreLib, Version=6.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e">
-            <Value>47</Value>
+            <Value>51</Value>
           </Field>
         </Item>
         <Item Index="5" Type="Jypeli.ScoreItem, Jypeli, Version=11.3.7.0, Culture=neutral, PublicKeyToken=null">
@@ -48,7 +48,7 @@
             <Value>joona</Value>
           </Field>
           <Field Name="Score" Type="System.Double, System.Private.CoreLib, Version=6.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e">
-            <Value>45</Value>
+            <Value>47</Value>
           </Field>
         </Item>
         <Item Index="6" Type="Jypeli.ScoreItem, Jypeli, Version=11.3.7.0, Culture=neutral, PublicKeyToken=null">
@@ -56,7 +56,7 @@
             <Value>joona</Value>
           </Field>
           <Field Name="Score" Type="System.Double, System.Private.CoreLib, Version=6.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e">
-            <Value>41</Value>
+            <Value>45</Value>
           </Field>
         </Item>
         <Item Index="7" Type="Jypeli.ScoreItem, Jypeli, Version=11.3.7.0, Culture=neutral, PublicKeyToken=null">
@@ -64,7 +64,7 @@
             <Value>joona</Value>
           </Field>
           <Field Name="Score" Type="System.Double, System.Private.CoreLib, Version=6.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e">
-            <Value>39</Value>
+            <Value>41</Value>
           </Field>
         </Item>
         <Item Index="8" Type="Jypeli.ScoreItem, Jypeli, Version=11.3.7.0, Culture=neutral, PublicKeyToken=null">
@@ -72,7 +72,7 @@
             <Value>joona</Value>
           </Field>
           <Field Name="Score" Type="System.Double, System.Private.CoreLib, Version=6.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e">
-            <Value>37</Value>
+            <Value>39</Value>
           </Field>
         </Item>
         <Item Index="9" Type="Jypeli.ScoreItem, Jypeli, Version=11.3.7.0, Culture=neutral, PublicKeyToken=null">
@@ -80,7 +80,7 @@
             <Value>joona</Value>
           </Field>
           <Field Name="Score" Type="System.Double, System.Private.CoreLib, Version=6.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e">
-            <Value>35</Value>
+            <Value>37</Value>
           </Field>
         </Item>
       </Array>
