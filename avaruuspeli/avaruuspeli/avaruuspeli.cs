@@ -22,11 +22,8 @@ public class avaruuspeli : PhysicsGame
     private Image _savu = LoadImage("Savu.png");
     
     private AssaultRifle _ase;
-
     private IntMeter _pistelaskuri;
-    
     private PhysicsObject _alus;
-    
     private EasyHighScore _topLista = new EasyHighScore();
     
     public override void Begin()
@@ -51,7 +48,7 @@ public class avaruuspeli : PhysicsGame
         Level.Background.TileToLevel();
         Timer vihuSpawni = new Timer()
         {
-            Interval = 2,
+            Interval = 4,
         };
         vihuSpawni.Timeout += VihollisAlukset;
         vihuSpawni.Start();
@@ -96,12 +93,24 @@ public class avaruuspeli : PhysicsGame
         _alus.CanRotate = false;
         
         Mouse.ListenMovement(0.1, Tahtaa, "Tähtää aseella");
+
+        if (_alus.IsDestroyed)
+        {
+            KuolemaRuutu();
+        }
     }
     void Tahtaa()
     {
         Vector suunta = (Mouse.PositionOnWorld - _alus.AbsolutePosition).Normalize();
         _ase.Angle = suunta.Angle;
         _alus.Angle = suunta.Angle + Angle.FromDegrees(-135);
+    }
+    
+    private void KuunteleLiiketta()
+    {
+        Vector hiiri = Mouse.PositionOnWorld - _alus.Position;
+        _alus.MoveTo(hiiri * Int32.MaxValue, 150);
+
     }
     
     private void VihollisAlukset()
@@ -175,24 +184,10 @@ public class avaruuspeli : PhysicsGame
         asteroidiLiike.Speed = 10;
         asteroidiLiike.ChangeMovementSeconds = 5;
     }
-    
-    private void Jatka()
-    {
-        Pause();
-    }
-    
-    private void KuunteleLiiketta()
-    {
-        //Vector paikkaRuudulla = Mouse.PositionOnWorld;
-        //_alus.MoveTo(paikkaRuudulla, 500);
 
-        Vector hiiri = Mouse.PositionOnWorld - _alus.Position;
-        _alus.MoveTo(hiiri * Int32.MaxValue, 150);
-
-    }
-    
     private void AloitusNayttö()
     {
+        Pause();
         MultiSelectWindow alkuvalikko = new MultiSelectWindow("Avaruus Peli!", "Aloita peli", "Parhaat pisteet", "Lopeta");
         Add(alkuvalikko);
         
@@ -207,12 +202,61 @@ public class avaruuspeli : PhysicsGame
     
     private void AloitaPeli()
     {
-        
+        Pause();
     }
 
     private void ParhaatPisteet()
     {
+        _topLista.Show();
+        _topLista.HighScoreWindow.Closed += AloitaPeli;
+    }
+
+    private void KuolemaRuutu()
+    {
+        MultiSelectWindow kuolemaMenu = new MultiSelectWindow("Kuolit", "Aloita alusta", "Parhaat pisteet", "Lopeta");
+        Add(kuolemaMenu);
         
+        kuolemaMenu.AddItemHandler(0, AloitaAlusta);
+        kuolemaMenu.AddItemHandler(1, ParhaatPisteet);
+        kuolemaMenu.AddItemHandler(2, Exit);
+    }
+    
+    private void Paussilla()
+    {
+        Pause();
+        MultiSelectWindow paussiMenu = new MultiSelectWindow("Paussilla", "Jatka", "Aloita Alusta", "Lopeta");
+        paussiMenu.AddItemHandler(0, Jatka);
+        paussiMenu.AddItemHandler(1, AloitaAlusta);
+        paussiMenu.AddItemHandler(2, Exit);
+        paussiMenu.DefaultCancel = 0;
+        Add(paussiMenu);
+        
+        paussiMenu.Color = Color.DarkGray;
+        paussiMenu.SetButtonColor(Color.MidnightBlue);
+    }
+    
+    private void Jatka()
+    {
+        Pause();
+    }
+
+    private void AloitaAlusta()
+    {
+        ClearAll();
+        Begin();
+    }
+    private void LisaaPelaajanPisteet()
+    {
+        _alus.Destroy();
+        _topLista.EnterAndShow(_pistelaskuri.Value);
+        _topLista.HighScoreWindow.Closed += AloitaPeli;
+    }
+    
+    public void AloitaPeli(Window sender)
+    {
+        AloitusNayttö();
+        ClearAll();
+        Begin();
     }
     
     void LuoAikalaskuri()
@@ -246,20 +290,7 @@ public class avaruuspeli : PhysicsGame
         
         pistenaytto.Title = "Pisteet: ";
     }
-    
-    private void Paussilla()
-    {
-        Pause();
-        MultiSelectWindow paussiMenu = new MultiSelectWindow("Paussilla", "Jatka", "Lopeta");
-        paussiMenu.AddItemHandler(0, Jatka);
-        paussiMenu.AddItemHandler(1, Exit);
-        paussiMenu.DefaultCancel = 0;
-        Add(paussiMenu);
-        
-        paussiMenu.Color = Color.DarkGray;
-        paussiMenu.SetButtonColor(Color.MidnightBlue);
-    }
-    
+
     private void AmmusOsui(PhysicsObject ammus, PhysicsObject kohde)
     {
         ammus.Destroy();
@@ -316,17 +347,6 @@ public class avaruuspeli : PhysicsGame
             ammus.Image = _ammus;
             ammus.MaximumLifetime = TimeSpan.FromSeconds(2.0);
         }
-    }
-    
-    private void PelaajaKuoli()
-    {
-        _topLista.EnterAndShow(_pistelaskuri.Value);
-        _topLista.HighScoreWindow.Closed += AloitaPeli;
-    }
-    
-    public void AloitaPeli(Window sender)
-    {
-        
     }
 }
 
