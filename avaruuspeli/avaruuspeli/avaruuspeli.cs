@@ -145,7 +145,7 @@ public class avaruuspeli : PhysicsGame
 
         AssaultRifle vihollistenAse = new AssaultRifle(0, 0)
         {
-            FireRate = 1.5,
+            FireRate = 1,
             ProjectileCollision = AmmusOsui,
             
         };
@@ -295,7 +295,7 @@ public class avaruuspeli : PhysicsGame
                 _intervaliaNostettu = newValue;
                 if (_intervaliaNostettu > 1)
                 {
-                    _vihuSpawni.Interval -= 1;
+                    _vihuSpawni.Interval -= 2;
                 }
             }
         };
