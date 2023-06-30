@@ -10,7 +10,7 @@ using Jypeli.Widgets;
 
 namespace avaruuspeli;
 
-// Versio 1.1
+// Versio 1.2
 
 public class avaruuspeli : PhysicsGame
 {
