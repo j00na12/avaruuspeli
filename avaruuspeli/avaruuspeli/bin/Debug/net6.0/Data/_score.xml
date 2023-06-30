@@ -8,7 +8,7 @@
             <Value>joona</Value>
           </Field>
           <Field Name="Score" Type="System.Double, System.Private.CoreLib, Version=6.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e">
-            <Value>39</Value>
+            <Value>53</Value>
           </Field>
         </Item>
         <Item Index="1" Type="Jypeli.ScoreItem, Jypeli, Version=11.3.7.0, Culture=neutral, PublicKeyToken=null">
@@ -16,7 +16,7 @@
             <Value>joona</Value>
           </Field>
           <Field Name="Score" Type="System.Double, System.Private.CoreLib, Version=6.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e">
-            <Value>27</Value>
+            <Value>51</Value>
           </Field>
         </Item>
         <Item Index="2" Type="Jypeli.ScoreItem, Jypeli, Version=11.3.7.0, Culture=neutral, PublicKeyToken=null">
@@ -24,7 +24,7 @@
             <Value>joona</Value>
           </Field>
           <Field Name="Score" Type="System.Double, System.Private.CoreLib, Version=6.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e">
-            <Value>21</Value>
+            <Value>47</Value>
           </Field>
         </Item>
         <Item Index="3" Type="Jypeli.ScoreItem, Jypeli, Version=11.3.7.0, Culture=neutral, PublicKeyToken=null">
@@ -32,7 +32,7 @@
             <Value>joona</Value>
           </Field>
           <Field Name="Score" Type="System.Double, System.Private.CoreLib, Version=6.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e">
-            <Value>15</Value>
+            <Value>45</Value>
           </Field>
         </Item>
         <Item Index="4" Type="Jypeli.ScoreItem, Jypeli, Version=11.3.7.0, Culture=neutral, PublicKeyToken=null">
@@ -40,7 +40,7 @@
             <Value>joona</Value>
           </Field>
           <Field Name="Score" Type="System.Double, System.Private.CoreLib, Version=6.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e">
-            <Value>15</Value>
+            <Value>39</Value>
           </Field>
         </Item>
         <Item Index="5" Type="Jypeli.ScoreItem, Jypeli, Version=11.3.7.0, Culture=neutral, PublicKeyToken=null">
@@ -48,7 +48,7 @@
             <Value>joona</Value>
           </Field>
           <Field Name="Score" Type="System.Double, System.Private.CoreLib, Version=6.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e">
-            <Value>15</Value>
+            <Value>37</Value>
           </Field>
         </Item>
         <Item Index="6" Type="Jypeli.ScoreItem, Jypeli, Version=11.3.7.0, Culture=neutral, PublicKeyToken=null">
@@ -56,7 +56,7 @@
             <Value>joona</Value>
           </Field>
           <Field Name="Score" Type="System.Double, System.Private.CoreLib, Version=6.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e">
-            <Value>15</Value>
+            <Value>35</Value>
           </Field>
         </Item>
         <Item Index="7" Type="Jypeli.ScoreItem, Jypeli, Version=11.3.7.0, Culture=neutral, PublicKeyToken=null">
@@ -64,7 +64,7 @@
             <Value>joona</Value>
           </Field>
           <Field Name="Score" Type="System.Double, System.Private.CoreLib, Version=6.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e">
-            <Value>15</Value>
+            <Value>33</Value>
           </Field>
         </Item>
         <Item Index="8" Type="Jypeli.ScoreItem, Jypeli, Version=11.3.7.0, Culture=neutral, PublicKeyToken=null">
@@ -72,7 +72,7 @@
             <Value>joona</Value>
           </Field>
           <Field Name="Score" Type="System.Double, System.Private.CoreLib, Version=6.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e">
-            <Value>14</Value>
+            <Value>29</Value>
           </Field>
         </Item>
         <Item Index="9" Type="Jypeli.ScoreItem, Jypeli, Version=11.3.7.0, Culture=neutral, PublicKeyToken=null">
@@ -80,7 +80,7 @@
             <Value>joona</Value>
           </Field>
           <Field Name="Score" Type="System.Double, System.Private.CoreLib, Version=6.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e">
-            <Value>11</Value>
+            <Value>27</Value>
           </Field>
         </Item>
       </Array>

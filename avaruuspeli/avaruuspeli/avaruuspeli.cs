@@ -18,12 +18,14 @@ public class avaruuspeli : PhysicsGame
     private Image _ammus = LoadImage("Ammus.png");
     private Image _asteroidi = LoadImage("Asteroidi.png");
     private Image _liekki = LoadImage("Liekki.png");
-    
+    private Image _violettiAlus = LoadImage("HienoViolettiAlus.png");
+    private EasyHighScore _topLista = new EasyHighScore();
     private AssaultRifle _ase;
     private IntMeter _pistelaskuri;
     private PhysicsObject _alus;
-    private EasyHighScore _topLista = new EasyHighScore();
-    
+    private int _intervaliaNostettu = 0;
+    private Timer _vihuSpawni;
+
     public override void Begin()
     {
         IsFullScreen = true;
@@ -46,12 +48,12 @@ public class avaruuspeli : PhysicsGame
         Camera.StayInLevel = true;
         Level.Background.TileToLevel();
         
-        Timer vihuSpawni = new Timer()
+        _vihuSpawni = new Timer()
         {
-            Interval = 4,
+            Interval = 10,
         };
-        vihuSpawni.Timeout += VihollisAlukset;
-        vihuSpawni.Start();
+        _vihuSpawni.Timeout += VihollisAlukset;
+        _vihuSpawni.Start();
         
         Timer asterpodiSpawni = new Timer()
         {
@@ -59,11 +61,6 @@ public class avaruuspeli : PhysicsGame
         };
         asterpodiSpawni.Timeout += Asteroidit;
         asterpodiSpawni.Start();
-        
-        for (int i = 50; i in _pistelaskuri.Value)
-        {
-            vihuSpawni.Interval -= 1;
-        }
     }
     
     private void Ohjaukset()
@@ -101,6 +98,7 @@ public class avaruuspeli : PhysicsGame
         
         _alus.Destroyed += LisaaPelaajanPisteet;
     }
+    
     void Tahtaa()
     {
         Vector suunta = (Mouse.PositionOnWorld - _alus.AbsolutePosition).Normalize();
@@ -112,7 +110,6 @@ public class avaruuspeli : PhysicsGame
     {
         Vector hiiri = Mouse.PositionOnWorld - _alus.Position;
         _alus.MoveTo(hiiri * Int32.MaxValue, 150);
-
     }
     
     private void VihollisAlukset()
@@ -133,7 +130,7 @@ public class avaruuspeli : PhysicsGame
         
         PhysicsObject vihollisenAlus = new PhysicsObject(32, 32)
         {
-            Image = _vihollisaluksenKuva,
+            Image = RandomGen.SelectOne(_vihollisaluksenKuva, _violettiAlus),
             Position = vihollisenRunko.Position,
             Angle = Angle.FromDegrees(-135),
         };
@@ -148,7 +145,7 @@ public class avaruuspeli : PhysicsGame
 
         AssaultRifle vihollistenAse = new AssaultRifle(0, 0)
         {
-            FireRate = 3,
+            FireRate = 1.5,
             ProjectileCollision = AmmusOsui,
             
         };
@@ -213,7 +210,7 @@ public class avaruuspeli : PhysicsGame
         _topLista.HighScoreWindow.Closed += AloitaPeli;
     }
 
-    private void KuolemaRuutu()
+    /*private void KuolemaRuutu()
     {
         MultiSelectWindow kuolemaMenu = new MultiSelectWindow("Kuolit", "Aloita alusta", "Parhaat pisteet", "Lopeta");
         Add(kuolemaMenu);
@@ -221,7 +218,7 @@ public class avaruuspeli : PhysicsGame
         kuolemaMenu.AddItemHandler(0, AloitaAlusta);
         kuolemaMenu.AddItemHandler(1, ParhaatPisteet);
         kuolemaMenu.AddItemHandler(2, Exit);
-    }
+    }*/
     
     private void Paussilla()
     {
@@ -254,7 +251,7 @@ public class avaruuspeli : PhysicsGame
         _topLista.HighScoreWindow.Closed += AloitaPeli;
     }
     
-    public void AloitaPeli(Window sender)
+    private void AloitaPeli(Window sender)
     {
         AloitusNayttö();
         ClearAll();
@@ -291,6 +288,43 @@ public class avaruuspeli : PhysicsGame
         Add(pistenaytto);
         
         pistenaytto.Title = "Pisteet: ";
+        _pistelaskuri.Changed += delegate(int value, int newValue)
+        {
+            if (newValue == _intervaliaNostettu + 50)
+            {
+                _intervaliaNostettu = newValue;
+                if (_intervaliaNostettu > 1)
+                {
+                    _vihuSpawni.Interval -= 1;
+                }
+            }
+        };
+    }
+    
+    void AmmuAseella(AssaultRifle ase)
+    {
+        PhysicsObject ammus = ase.Shoot();
+
+        if (ammus != null)
+        {
+            ammus.AddCollisionIgnoreGroup(11);
+            ammus.Size *= 2;
+            ammus.Image = _ammus;
+            ammus.MaximumLifetime = TimeSpan.FromSeconds(2.0);
+        }
+    }
+    
+    void VihollinenAmpuu(AssaultRifle ase)
+    {
+        PhysicsObject ammus = ase.Shoot();
+
+        if (ammus != null)
+        {
+            ammus.AddCollisionIgnoreGroup(11);
+            ammus.Size *= 2;
+            ammus.Image = _ammus;
+            ammus.MaximumLifetime = TimeSpan.FromSeconds(2.0);
+        }
     }
 
     private void AmmusOsui(PhysicsObject ammus, PhysicsObject kohde)
@@ -327,29 +361,6 @@ public class avaruuspeli : PhysicsGame
             rajahdys.AddEffect(ammus.Position, pMaara);
         }
     }
-    
-    void AmmuAseella(AssaultRifle ase)
-    {
-        PhysicsObject ammus = ase.Shoot();
-
-        if (ammus != null)
-        {
-            ammus.Size *= 2;
-            ammus.Image = _ammus;
-            ammus.MaximumLifetime = TimeSpan.FromSeconds(2.0);
-        }
-    }
-    void VihollinenAmpuu(AssaultRifle ase)
-    {
-        PhysicsObject ammus = ase.Shoot();
-
-        if (ammus != null)
-        {
-            ammus.Size *= 2;
-            ammus.Image = _ammus;
-            ammus.MaximumLifetime = TimeSpan.FromSeconds(2.0);
-        }
-    }
 }
 
 class Vihollinen : PhysicsObject
@@ -366,7 +377,7 @@ class Vihollinen : PhysicsObject
 
 class AlusKuolee : PhysicsObject
 {
-    private IntMeter _elamalaskuri = new IntMeter(3, 0, 3);
+    private IntMeter _elamalaskuri = new IntMeter(5, 0, 5);
     public  IntMeter Elamalaskuri { get { return _elamalaskuri; } }
 
     public AlusKuolee(double leveys, double korkeus)
@@ -375,7 +386,6 @@ class AlusKuolee : PhysicsObject
         _elamalaskuri.LowerLimit += delegate { this.Destroy(); };
     }
 }
-
 
 class AsteroidiTuho : PhysicsObject
 {
