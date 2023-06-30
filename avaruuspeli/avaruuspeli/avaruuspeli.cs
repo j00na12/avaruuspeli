@@ -290,12 +290,12 @@ public class avaruuspeli : PhysicsGame
         pistenaytto.Title = "Pisteet: ";
         _pistelaskuri.Changed += delegate(int value, int newValue)
         {
-            if (newValue == _intervaliaNostettu + 50)
+            if (newValue == _intervaliaNostettu + 35)
             {
                 _intervaliaNostettu = newValue;
                 if (_intervaliaNostettu > 1)
                 {
-                    _vihuSpawni.Interval -= 2;
+                    _vihuSpawni.Interval -= 1;
                 }
             }
         };
