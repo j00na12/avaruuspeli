@@ -13,13 +13,11 @@ namespace avaruuspeli;
 public class avaruuspeli : PhysicsGame
 {
     private Image _avaruusTausta = LoadImage("AvaruusTausta.png");
-    private Image _nebula = LoadImage("HienoNebula.png");
     private Image _aluksenKuva = LoadImage("Alus.png");
     private Image _vihollisaluksenKuva = LoadImage("VihollisAlus.png");
     private Image _ammus = LoadImage("Ammus.png");
     private Image _asteroidi = LoadImage("Asteroidi.png");
     private Image _liekki = LoadImage("Liekki.png");
-    private Image _savu = LoadImage("Savu.png");
     
     private AssaultRifle _ase;
     private IntMeter _pistelaskuri;
@@ -28,6 +26,7 @@ public class avaruuspeli : PhysicsGame
     
     public override void Begin()
     {
+        IsFullScreen = true;
         FixedTimeStep = true;
         Kentta();
         Alus();
@@ -46,19 +45,25 @@ public class avaruuspeli : PhysicsGame
         Level.Height = 20000;
         Camera.StayInLevel = true;
         Level.Background.TileToLevel();
+        
         Timer vihuSpawni = new Timer()
         {
             Interval = 4,
         };
         vihuSpawni.Timeout += VihollisAlukset;
         vihuSpawni.Start();
-
+        
         Timer asterpodiSpawni = new Timer()
         {
             Interval = 30,
         };
         asterpodiSpawni.Timeout += Asteroidit;
         asterpodiSpawni.Start();
+        
+        for (int i = 50; i in _pistelaskuri.Value)
+        {
+            vihuSpawni.Interval -= 1;
+        }
     }
     
     private void Ohjaukset()
@@ -93,11 +98,8 @@ public class avaruuspeli : PhysicsGame
         _alus.CanRotate = false;
         
         Mouse.ListenMovement(0.1, Tahtaa, "Tähtää aseella");
-
-        if (_alus.IsDestroyed)
-        {
-            KuolemaRuutu();
-        }
+        
+        _alus.Destroyed += LisaaPelaajanPisteet;
     }
     void Tahtaa()
     {
@@ -150,7 +152,7 @@ public class avaruuspeli : PhysicsGame
             ProjectileCollision = AmmusOsui,
             
         };
-        Timer ajastin = Timer.CreateAndStart(3, delegate { VihollinenAmpuu(vihollistenAse); });
+        Timer.CreateAndStart(1, delegate { VihollinenAmpuu(vihollistenAse); });
         
         vihollistenAse.Position = vihollisenRunko.Position + new Vector(0, 0);
         vihollisenRunko.Add(vihollistenAse);
